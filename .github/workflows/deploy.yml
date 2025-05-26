@@ -1,0 +1,27 @@
+name: icp rust bootcamp
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - uses: actions/cache@v4
+        with:
+          key: ${{ github.ref }}
+          path: .cache
+      - name: Install MkDocs and dependencies
+        run: |
+          pip install mkdocs
+          pip install mkdocs-dracula-theme
+          pip install pymdown-extensions
+          pip install mkdocs-simple-hooks
+      - name: Deploy documentation
+        run: mkdocs gh-deploy --force

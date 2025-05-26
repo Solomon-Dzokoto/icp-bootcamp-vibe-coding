@@ -1,0 +1,86 @@
+[package]
+name = "rust-bootcamp-vibe-coding"
+version = "0.1.0"
+edition = "2021"
+description = "A modular Rust bootcamp with a focus on practical exercises and Internet Computer development"
+authors = ["Antoine Espieux <antoine@lunarstrategy.com>"]
+
+[dependencies]
+chrono = "0.4"  # For date/time handling in examples
+serde = { version = "1.0", features = ["derive"] }  # For serialization examples
+serde_json = "1.0"  # For JSON handling
+
+# Optional dependencies for advanced modules
+# Uncomment as needed for specific exercises
+# clap = { version = "4.0", features = ["derive"] }  # For CLI examples
+# reqwest = { version = "0.11", features = ["json"] }  # For HTTP examples
+# tokio = { version = "1", features = ["full"] }  # For async examples
+
+# ICP-specific dependencies (for module 7)
+# ic-cdk = "0.7"  # Internet Computer CDK
+# ic-cdk-macros = "0.6"  # Macros for ICP development
+# candid = "0.8"  # Candid interface description language
+
+# Define all exercise starter files as binaries
+[[bin]]
+name = "module1_01"
+path = "modules/module1-fundamentals/exercises/01_hello_rust_starter.rs"
+
+[[bin]]
+name = "module1_02"
+path = "modules/module1-fundamentals/exercises/02_variable_basics_starter.rs"
+
+[[bin]]
+name = "module1_03"
+path = "modules/module1-fundamentals/exercises/03_function_workshop_starter.rs"
+
+[[bin]]
+name = "module1_04"
+path = "modules/module1-fundamentals/exercises/04_control_flow_challenge_starter.rs"
+
+[[bin]]
+name = "module2_01"
+path = "modules/module2-memory-management/exercises/01_ownership_practice_starter.rs"
+
+[[bin]]
+name = "module2_02"
+path = "modules/module2-memory-management/exercises/02_borrowing_challenge_starter.rs"
+
+[[bin]]
+name = "module2_03"
+path = "modules/module2-memory-management/exercises/03_slice_workshop_starter.rs"
+
+[[bin]]
+name = "module2_04"
+path = "modules/module2-memory-management/exercises/04_memory_management_debugging_starter.rs"
+
+[[bin]]
+name = "module3_01"
+path = "modules/module3-data-types/exercises/01_library_system_starter.rs"
+
+[[bin]]
+name = "module3_02"
+path = "modules/module3-data-types/exercises/02_error_handling_starter.rs"
+
+[[bin]]
+name = "module4_01"
+path = "modules/module4-code-organization/exercises/01_module_explorer_starter.rs"
+
+[[bin]]
+name = "module5_01"
+path = "modules/module5-collections/exercises/01_collection_manipulation_starter.rs"
+
+[[bin]]
+name = "module5_final"
+path = "modules/module5-collections/exercises/final_challenge/starter_code.rs"
+
+[[bin]]
+name = "module6_01"
+path = "modules/module6-advanced-concepts/exercises/01_trait_workshop_starter.rs"
+
+[[bin]]
+name = "module7_01"
+path = "modules/module7-icp-integration/exercises/01_hello_icp_starter.rs"
+
+[workspace]
+members = []

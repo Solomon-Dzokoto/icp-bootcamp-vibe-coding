@@ -1,0 +1,81 @@
+site_name: Rust Bootcamp with Vibe Coding
+site_description: Learn Rust programming with a focus on practical applications and Internet Computer development
+site_url: https://pt-icp-hub.github.io/ICP-Bootcamp-Vibe-Coding-Beginner
+
+docs_dir: modules
+
+# Navigation structure with proper relative links
+nav:
+  - Home: index.md
+  - "Core Modules":
+      - "Module 1: Rust Fundamentals":
+          - Overview: "module1-fundamentals/README.md"
+          - Guides:
+              - "Getting Started": "module1-fundamentals/guides/getting_started.md"
+              - "Variables": "module1-fundamentals/guides/variables.md"
+              - "Data Types": "module1-fundamentals/guides/data_types.md"
+              - "Functions": "module1-fundamentals/guides/functions.md"
+              - "Control Flow": "module1-fundamentals/guides/control_flow.md"
+          - Exercises:
+              - "Hello Rust": "module1-fundamentals/exercises/01_hello_rust.md"
+              - "Variable Basics": "module1-fundamentals/exercises/02_variable_basics.md"
+              - "Function Workshop": "module1-fundamentals/exercises/03_function_workshop.md"
+              - "Control Flow Challenge": "module1-fundamentals/exercises/04_control_flow_challenge.md"
+      - "Module 2: Memory Management":
+          - Overview: "module2-memory-management/README.md"
+          - Guides:
+              - "Memory Concepts": "module2-memory-management/guides/memory_concepts.md"
+              - "Ownership": "module2-memory-management/guides/ownership.md"
+              - "Borrowing": "module2-memory-management/guides/borrowing.md"
+              - "Slices": "module2-memory-management/guides/slices.md"
+          - Exercises:
+              - "Ownership Practice": "module2-memory-management/exercises/01_ownership_practice.md"
+              - "Borrowing Challenge": "module2-memory-management/exercises/02_borrowing_challenge.md"
+              - "Slice Workshop": "module2-memory-management/exercises/03_slice_workshop.md"
+              - "Memory Management Debugging": "module2-memory-management/exercises/04_memory_management_debugging.md"
+      - "Module 3: Data Types":
+          - Overview: "module3-data-types/README.md"
+          - Guides:
+              - "Structs": "module3-data-types/guides/structs.md"
+              - "Enums": "module3-data-types/guides/enums.md"
+              - "Pattern Matching": "module3-data-types/guides/pattern_matching.md"
+          - Exercises:
+              - "Library System": "module3-data-types/exercises/01_library_system.md"
+              - "Error Handling": "module3-data-types/exercises/02_error_handling.md"
+      - "Module 4: Code Organization":
+          - Overview: "module4-code-organization/README.md"
+          - Exercises:
+              - "Module Explorer": "module4-code-organization/exercises/01_module_explorer.md"
+      - "Module 5: Collections":
+          - Overview: "module5-collections/README.md"
+          - Exercises:
+              - "Collection Manipulation": "module5-collections/exercises/01_collection_manipulation.md"
+              - "Final Challenge": "module5-collections/exercises/final_challenge/README.md"
+      - "Module 7: ICP Integration":
+          - Overview: "module7-icp-integration/README.md"
+          - Exercises:
+              - "Hello ICP": "module7-icp-integration/exercises/01_hello_icp.md"
+  - "Optional Modules":
+      - "Module 6: Advanced Concepts":
+          - Overview: "module6-advanced-concepts/README.md"
+          - Exercises:
+              - "Trait Workshop": "module6-advanced-concepts/exercises/01_trait_workshop.md"
+
+theme:
+  name: dracula
+  favicon: assets/favicon.ico
+  logo: assets/logo.png
+  font:
+    text: Roboto
+    code: "Open Sans"
+  features:
+    - navigation.tracking
+    - navigation.sections
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.top
+    - search.suggest
+    - content.code.copy
+# Custom styling for Internet Computer theme
+# extra_css:
+#   - assets/css/icp-theme.css
