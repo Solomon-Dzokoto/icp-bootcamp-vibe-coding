@@ -1,43 +1,120 @@
+use std::collections::HashMap;
+use std::fmt;
+
 // Define the Book struct
+#[derive(Debug, Clone)]
 struct Book {
-    // TODO: Add fields for book properties (title, author, year, isbn)
+    title: String,
+    author: String,
+    year: u32,
+    isbn: String,
+}
+
+impl Book {
+    fn new(title: &str, author: &str, year: u32, isbn: &str) -> Book {
+        Book {
+            title: title.to_string(),
+            author: author.to_string(),
+            year,
+            isbn: isbn.to_string(),
+        }
+    }
+}
+
+impl fmt::Display for Book {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "\"{}\", by {} ({})", self.title, self.author, self.year)
+    }
 }
 
 // Define a BookStatus enum to track availability
+#[derive(Debug, Clone, PartialEq)]
 enum BookStatus {
-    // TODO: Add variants for different states (Available, Borrowed)
+    Available,
+    Borrowed { since: String },
+}
+
+impl fmt::Display for BookStatus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            BookStatus::Available => write!(f, "Available"),
+            BookStatus::Borrowed { since } => write!(f, "Borrowed since {}", since),
+        }
+    }
 }
 
 // Define a Library struct to manage books
 struct Library {
-    // TODO: Add fields to store books and their status
+    books: HashMap<String, (Book, BookStatus)>,  // ISBN -> (Book, Status)
 }
 
 // TODO: Implement methods for the Library struct
 impl Library {
     // Create a new, empty library
     fn new() -> Library {
-        // TODO: Implement this function
+        Library {
+            books: HashMap::new(),
+        }
     }
 
     // Add a book to the library
     fn add_book(&mut self, book: Book) {
-        // TODO: Implement this function
+        self.books.insert(book.isbn.clone(), (book, BookStatus::Available));
     }
 
     // Borrow a book from the library
     fn borrow_book(&mut self, isbn: &str) -> Result<&Book, &str> {
-        // TODO: Implement this function
+        match self.books.get_mut(isbn) {
+            Some((book, status)) => {
+                if *status == BookStatus::Available {
+                    *status = BookStatus::Borrowed { 
+                        since: chrono::Local::now().format("%Y-%m-%d").to_string() 
+                    };
+                    Ok(book)
+                } else {
+                    Err("Book is already borrowed")
+                }
+            }
+            None => Err("Book not found"),
+        }
     }
 
     // Return a borrowed book to the library
     fn return_book(&mut self, isbn: &str) -> Result<&Book, &str> {
-        // TODO: Implement this function
+        match self.books.get_mut(isbn) {
+            Some((book, status)) => {
+                if let BookStatus::Borrowed { .. } = status {
+                    *status = BookStatus::Available;
+                    Ok(book)
+                } else {
+                    Err("Book is not borrowed")
+                }
+            }
+            None => Err("Book not found"),
+        }
     }
 
     // List all books in the library with their status
     fn list_books(&self) {
-        // TODO: Implement this function
+        println!("\nLibrary Catalog:");
+        println!("---------------");
+        if self.books.is_empty() {
+            println!("No books in the library.");
+            return;
+        }
+
+        let mut sorted_books: Vec<_> = self.books.iter().collect();
+        sorted_books.sort_by(|a, b| a.1.0.title.cmp(&b.1.0.title));
+
+        for (_, (book, status)) in sorted_books {
+            println!("{}", "-".repeat(50));
+            println!("Title: {}", book.title);
+            println!("Author: {}", book.author);
+            println!("Year: {}", book.year);
+            println!("ISBN: {}", book.isbn);
+            println!("Status: {}", status);
+        }
+        println!("{}", "-".repeat(50));
     }
 }
 
