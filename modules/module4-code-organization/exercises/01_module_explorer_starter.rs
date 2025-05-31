@@ -1,196 +1,109 @@
-use std::collections::HashMap;
-
-// Product Module
-mod product {
-    #[derive(Debug, Clone)]
-    pub struct Product {
-        pub id: u32,
-        pub name: String,
-        pub price: f64,
-        pub description: String,
-    }
-
-    impl Product {
-        pub fn new(id: u32, name: &str, price: f64, description: &str) -> Self {
-            Product {
-                id,
-                name: name.to_string(),
-                price,
-                description: description.to_string(),
-            }
-        }
-
-        pub fn display(&self) -> String {
-            format!("{} - ${:.2} ({})", self.name, self.price, self.description)
-        }
+// Module for utility functions
+mod utils {
+    // Formats a string with a given text label and a floating-point value, rounded to 2 decimal places.
+    pub fn format_output(text: &str, value: f64) -> String {
+        format!("{}: {:.2}", text, value)
     }
 }
 
-// Inventory Module
-mod inventory {
-    use super::product::Product;
-    use std::collections::HashMap;
+// Module for geometric shapes
+mod shapes {
+    // Bring the utility function into the scope of the shapes module.
+    // This allows us to use format_output without prefixing it with utils::
+    // For this exercise, we choose to use fully qualified paths or `super::utils` if preferred.
+    // use super::utils; // Option 1: use super to access parent's sibling module
+    // use crate::utils; // Option 2: use crate if utils is at the crate root (which it is here)
 
+    // Represents a Rectangle with public width and height.
     #[derive(Debug)]
-    pub struct Inventory {
-        products: HashMap<u32, (Product, u32)>, // Product ID -> (Product, Quantity)
+    pub struct Rectangle {
+        pub width: f64,
+        pub height: f64,
     }
 
-    impl Inventory {
-        pub fn new() -> Self {
-            Inventory {
-                products: HashMap::new(),
-            }
-        }
-
-        pub fn add_product(&mut self, product: Product, quantity: u32) {
-            self.products.insert(product.id, (product, quantity));
-        }
-
-        pub fn get_product(&self, id: u32) -> Option<&Product> {
-            self.products.get(&id).map(|(product, _)| product)
-        }
-
-        pub fn update_quantity(&mut self, id: u32, quantity: i32) -> Result<u32, &'static str> {
-            if let Some((_, current_quantity)) = self.products.get_mut(&id) {
-                let new_quantity = *current_quantity as i32 + quantity;
-                if new_quantity < 0 {
-                    return Err("Insufficient stock");
-                }
-                *current_quantity = new_quantity as u32;
-                Ok(*current_quantity)
-            } else {
-                Err("Product not found")
-            }
-        }
-
-        pub fn list_products(&self) {
-            println!("\n📦 Current Inventory:");
-            println!("{}", "=".repeat(50));
-            for (_, (product, quantity)) in &self.products {
-                println!("• {} (Stock: {})", product.display(), quantity);
-            }
-            println!("{}", "=".repeat(50));
+    impl Rectangle {
+        // Calculates the area of the rectangle.
+        pub fn area(&self) -> f64 {
+            self.width * self.height
         }
     }
-}
 
-// User Module
-mod user {
+    // Represents a Circle with a public radius.
     #[derive(Debug)]
-    pub struct User {
-        pub id: u32,
-        pub name: String,
-        pub email: String,
+    pub struct Circle {
+        pub radius: f64,
     }
 
-    impl User {
-        pub fn new(id: u32, name: &str, email: &str) -> Self {
-            User {
-                id,
-                name: name.to_string(),
-                email: email.to_string(),
+    impl Circle {
+        // Calculates the area of the circle.
+        pub fn area(&self) -> f64 {
+            std::f64::consts::PI * self.radius * self.radius
+        }
+    }
+
+    // Public enum to represent different kinds of shapes.
+    #[derive(Debug)]
+    pub enum Shape {
+        Rect(Rectangle), // Variant for Rectangle
+        Circ(Circle),    // Variant for Circle
+    }
+
+    // Public function to print information about a shape, including its type and area.
+    pub fn print_shape_info(shape: &Shape) {
+        match shape {
+            Shape::Rect(r) => {
+                // Use the utility function from the utils module (sibling to shapes).
+                let output = crate::utils::format_output("Rectangle Area", r.area());
+                println!("Shape: Rectangle (Width: {}, Height: {}) - {}", r.width, r.height, output);
+            }
+            Shape::Circ(c) => {
+                // Use the utility function.
+                let output = crate::utils::format_output("Circle Area", c.area());
+                println!("Shape: Circle (Radius: {}) - {}", c.radius, output);
             }
         }
     }
 }
 
-// Order Module
-mod order {
-    use super::product::Product;
-    use super::user::User;
-    use chrono::Local;
-
-    #[derive(Debug)]
-    pub struct OrderItem {
-        pub product: Product,
-        pub quantity: u32,
-    }
-
-    #[derive(Debug)]
-    pub struct Order {
-        pub id: u32,
-        pub user: User,
-        pub items: Vec<OrderItem>,
-        pub date: String,
-        pub total: f64,
-    }
-
-    impl Order {
-        pub fn new(id: u32, user: User) -> Self {
-            Order {
-                id,
-                user,
-                items: Vec::new(),
-                date: Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-                total: 0.0,
-            }
-        }
-
-        pub fn add_item(&mut self, product: Product, quantity: u32) {
-            self.total += product.price * quantity as f64;
-            self.items.push(OrderItem { product, quantity });
-        }
-
-        pub fn display(&self) {
-            println!("\n🛍️  Order Details");
-            println!("{}", "=".repeat(50));
-            println!("Order ID: #{}", self.id);
-            println!("Customer: {} ({})", self.user.name, self.user.email);
-            println!("Date: {}", self.date);
-            println!("\nItems:");
-            for item in &self.items {
-                println!("• {}x {}", item.quantity, item.product.display());
-            }
-            println!("{}", "-".repeat(30));
-            println!("Total: ${:.2}", self.total);
-            println!("{}", "=".repeat(50));
-        }
-    }
-}
-
-use product::Product;
-use inventory::Inventory;
-use user::User;
-use order::Order;
-
+// Main function to demonstrate the use of the shapes and utils modules.
 fn main() {
-    // Initialize inventory
-    let mut inventory = Inventory::new();
+    println!("--- Module Explorer Demonstration ---");
 
-    // Create products
-    let products = [
-        Product::new(1, "Mechanical Keyboard", 149.99, "RGB backlit, Cherry MX switches"),
-        Product::new(2, "Wireless Mouse", 79.99, "Ultra-lightweight gaming mouse"),
-        Product::new(3, "4K Monitor", 399.99, "27-inch, HDR support"),
-        Product::new(4, "USB-C Hub", 45.99, "7-in-1 adapter"),
-    ];
-
-    // Add products to inventory
-    for product in &products {
-        inventory.add_product(product.clone(), 10);
-    }
-
-    // Display initial inventory
-    inventory.list_products();
-
-    // Create a user
-    let user = User::new(1, "Alice Johnson", "alice@example.com");
-
-    // Create and process an order
-    let mut order = Order::new(1, user);
+    // Create a Rectangle instance using the shapes module.
+    let rect = shapes::Rectangle { width: 10.5, height: 5.2 };
     
-    // Add items to order
-    order.add_item(products[0].clone(), 1); // Keyboard
-    order.add_item(products[1].clone(), 2); // Two mice
+    // Create a Circle instance using the shapes module.
+    let circ = shapes::Circle { radius: 7.0 };
 
-    // Update inventory
-    inventory.update_quantity(1, -1).expect("Failed to update keyboard stock");
-    inventory.update_quantity(2, -2).expect("Failed to update mouse stock");
+    // Create Shape enum variants from the shapes module.
+    let shape_rect = shapes::Shape::Rect(rect);
+    let shape_circ = shapes::Shape::Circ(circ);
 
-    // Display order details
-    order.display();
+    // Print information about the shapes using the function from the shapes module.
+    println!("\n--- Using shapes::print_shape_info ---");
+    shapes::print_shape_info(&shape_rect);
+    shapes::print_shape_info(&shape_circ);
 
-    // Show updated inventory
-    inventory.list_products();
+    // Demonstrate direct use of the utils::format_output function.
+    println!("\n--- Direct use of utils::format_output ---");
+    let custom_value = 123.4567;
+    // utils is a sibling module to main (since main is at crate root and utils is defined at crate root)
+    let formatted_string = utils::format_output("Custom Value", custom_value);
+    println!("{}", formatted_string);
+
+    // Example: Accessing fields of Rectangle and Circle directly (since they are public)
+    // This is just to show fields are accessible as per subtask "Make fields public"
+    // For shape_rect and shape_circ, we need to match to get the inner struct first.
+    match shape_rect {
+        shapes::Shape::Rect(ref r) => { // Use `ref r` to borrow the Rectangle inside the enum
+             println!("\nAccessed Rectangle directly: width = {}, height = {}", r.width, r.height);
+        },
+        _ => {} // Should not happen in this specific main flow, but good for completeness
+    }
+     match shape_circ {
+        shapes::Shape::Circ(ref c) => { // Use `ref c` to borrow the Circle
+             println!("Accessed Circle directly: radius = {}", c.radius);
+        },
+        _ => {}
+    }
 }

@@ -71,7 +71,7 @@ name = "module5_01"
 path = "modules/module5-collections/exercises/01_collection_manipulation_starter.rs"
 
 [[bin]]
-name = "module5_final"
+name = "module5_final_challenge"
 path = "modules/module5-collections/exercises/final_challenge/starter_code.rs"
 
 [[bin]]
